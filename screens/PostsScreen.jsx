@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db, auth } from "../config";
 import { onAuthStateChanged } from "firebase/auth";
-import { selectAuthState, selectUserName } from "../redux/selectors";
+import { selectAuthState } from "../redux/selectors";
 import { useSelector } from "react-redux";
 
 const PostsScreen = () => {
@@ -13,55 +13,26 @@ const PostsScreen = () => {
   const [loading, setLoading] = useState(true);
   const [currentPosts, setCurrentPosts] = useState([]);
   const userId = useSelector(selectAuthState);
-  const displayName = useSelector(selectUserName);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
-      setUser(authUser);
-      setLoading(false);
-
-      if (user) {
-        const unsubscribePosts = onSnapshot(
-          collection(db, "posts"),
-          (snapshot) => {
-            const newPost = snapshot.docs.map((doc) => ({
-              ...doc.data(),
-              id: doc.id,
-            }));
-            const userPosts = newPost.filter((post) => post.userId === userId);
-            setCurrentPosts(userPosts);
-          }
-        );
-        return () => {
-          unsubscribePosts();
-        };
-      } else {
-        setCurrentPosts([]);
-      }
-    });
-    return () => {
-      unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "posts"), (snapshot) => {
-      const newData = snapshot.docs.map((doc) => ({
+    const getPosts = onSnapshot(collection(db, "posts"), (snapshot) => {
+      const newPost = snapshot.docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
       }));
-      setCurrentPosts(newData);
+      const userPosts = newPost.filter((post) => post.userId === userId);
+      setCurrentPosts(userPosts);
     });
-    return () => unsubscribe();
-  }, []);
+    return () => getPosts();
+  }, [currentPosts]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const getUserInfo = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      setLoading(false);
     });
-
     return () => {
-      unsubscribe();
+      getUserInfo();
     };
   }, []);
 
@@ -77,7 +48,7 @@ const PostsScreen = () => {
           <View
             style={{ alignItems: "flex-start", justifyContent: "flex-start" }}
           >
-            <Text style={styles.userName}>{displayName}</Text>
+            <Text style={styles.userName}>{user?.displayName}</Text>
             <Text style={styles.userEmail}>{user?.email}</Text>
           </View>
         </View>

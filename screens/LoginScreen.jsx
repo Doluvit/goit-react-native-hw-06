@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Pressable,
@@ -29,8 +29,22 @@ const LoginScreen = () => {
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isOpenKeyboard, setIsOpenKeyboard] = useState(false);
+   const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+ useEffect(() => {
+   const unsubscribe = auth.onAuthStateChanged((user) => {
+     setLoading(false);
+     if (user) {
+       navigation.navigate("Home");
+     }
+   });
+   return () => {
+     unsubscribe();
+   };
+ }, []);
+
   const togglePassword = () => {
     setSecureTextEntry(!secureTextEntry);
   };
@@ -92,6 +106,19 @@ const LoginScreen = () => {
   const onPressNavigate = () => {
     navigation.navigate("RegistrationScreen");
   };
+
+   if (loading) {
+     return (
+       <View
+         style={{ flex: 1, justifyContent: "center", alignItems: "center",
+         }}
+       >
+         <Text style={{ fontFamily: "Roboto-Medium", fontSize: 22 }}>
+           Loading...
+         </Text>
+       </View>
+     );
+   }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
