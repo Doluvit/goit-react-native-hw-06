@@ -9,7 +9,6 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
-  Alert,
 } from "react-native";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
@@ -34,7 +33,9 @@ const CreatePostsScreen = () => {
   const [photoTitle, setPhotoTitle] = useState("");
   const [photoUri, setPhotoUri] = useState(null);
   const [locationTitle, setLocationTitle] = useState("");
+  const [locationCountry, setLocationCountry] = useState("");
   const [location, setLocation] = useState(null);
+  const [locationObtained, setLocationObtained] = useState(false);
   const userId = useSelector(selectAuthState);
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -48,23 +49,47 @@ const CreatePostsScreen = () => {
     })();
   }, []);
 
-  const handleSubmit = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.error("Немає доступу до локації");
-      return;
+  useEffect(() => {
+    if (!locationObtained) {
+      const fetchUserLocation = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.error("Немає доступу до локації");
+          return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        const coords = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
+        setLocation(coords);
+
+        const reverseGeocode = async () => {
+          try {
+            const geocode = await Location.reverseGeocodeAsync(coords);
+            if (geocode && geocode.length > 0) {
+              setLocationTitle(geocode[0].city);
+              setLocationCountry(geocode[0].country);
+            }
+          } catch (error) {
+            console.error("Ошибка при геокодировании:", error);
+          }
+        };
+
+        await reverseGeocode();
+        setLocationObtained(true);
+      };
+
+      fetchUserLocation();
     }
+  }, [locationObtained]);
 
-    let location = await Location.getCurrentPositionAsync({});
-    const coords = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-    };
-    setLocation(coords);
-
+  const handleSubmit = async () => {
     const post = {
       photoTitle,
       locationTitle,
+      locationCountry,
       photoUri,
       location,
       comment: 0,
@@ -75,7 +100,6 @@ const CreatePostsScreen = () => {
     dispatch(addPost(post));
     navigation.navigate("Home", { screen: "Posts" });
     setPhotoTitle("");
-    setLocationTitle("");
     setPhotoUri(null);
   };
 
@@ -97,6 +121,13 @@ const CreatePostsScreen = () => {
     return (
       <View style={{ flex: 1, backgroundColor: "#fff" }}>
         <Text>Немає доступу до камери</Text>
+      </View>
+    );
+  }
+  if (locationTitle === "" || locationObtained === false) {
+    return (
+      <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        <Text>Отримую дані локації...</Text>
       </View>
     );
   }
@@ -174,7 +205,7 @@ const CreatePostsScreen = () => {
                 placeholder="Місцевість..."
                 onFocus={() => setIsOpenKeyboard(true)}
                 onBlur={() => setIsOpenKeyboard(false)}
-                value={locationTitle}
+                value={`${locationTitle}, ${locationCountry}`}
                 onChangeText={setLocationTitle}
               />
             </View>

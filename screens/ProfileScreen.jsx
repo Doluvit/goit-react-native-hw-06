@@ -1,7 +1,7 @@
 import { Image, Text, View, StyleSheet } from "react-native";
 import { ImageBackgroundComponent } from "../components/ImageBackgroundComponent";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import Post from "../components/Post";
+import UserPost from "../components/UserPost";
 import { LogOutButton } from "../components/LogOutButton";
 import { IconClose } from "../assets/icons/icons";
 import { FlatList } from "react-native";
@@ -81,11 +81,11 @@ const ProfileScreen = () => {
           data={currentPosts}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Post
+            <UserPost
               id={item.id}
               source={item.photoUri}
               title={item.photoTitle}
-              country={item.locationTitle}
+              country={item.locationCountry}
               coords={item.location}
               comment={item.comment}
             />

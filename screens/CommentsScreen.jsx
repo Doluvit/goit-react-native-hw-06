@@ -2,7 +2,6 @@ import { useRoute } from "@react-navigation/native";
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
@@ -10,10 +9,8 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
-  Alert,
-} from "react-native";
+  } from "react-native";
 import Comment from "../components/Comment";
-import { ScrollView } from "react-native";
 import { IconArrowUp } from "../assets/icons/icons";
 import { useRef } from "react";
 import { db } from "../config";
@@ -72,8 +69,6 @@ const CommentsScreen = () => {
     return `${date}`;
   };
 
-  const scrollViewRef = useRef(null);
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
@@ -115,10 +110,7 @@ const CommentsScreen = () => {
               )}
             ></FlatList>
             <View
-              style={[
-                styles.passwordInputContainer,
-                // isFocusedPassword && styles.inputFocused,
-              ]}
+              style={styles.passwordInputContainer}
             >
               <TextInput
                 onFocus={() => setIsOpenKeyboard(true)}

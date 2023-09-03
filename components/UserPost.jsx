@@ -2,7 +2,7 @@ import { View, Image, StyleSheet, Text } from "react-native";
 import {
   IconComment,
   IconLocalPosition,
-  // IconTrashBucket,
+  IconTrashBucket,
 } from "../assets/icons/icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
@@ -12,7 +12,7 @@ import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config";
 
-const Post = ({ source, title, comment, city, country, coords, id }) => {
+const UserPost = ({ source, title, comment, country, coords, id }) => {
   const [commentData, setCommentData] = useState([]);
   const [location, setLocation] = useState(null);
 
@@ -40,7 +40,7 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
           resizeMode={"cover"}
           style={{ width: "100%", height: 240, borderRadius: 8 }}
         />
-        {/* <TouchableOpacity
+        <TouchableOpacity
           onPress={() => deleteDataFromFirestore(id)}
           style={{
             position: "absolute",
@@ -56,7 +56,7 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
           }}
         >
           <IconTrashBucket />
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
       <Text style={styles.title}>{title}</Text>
 
@@ -107,7 +107,7 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
               },
             ]}
           >
-            {`${city}, ${country}`}
+            {country}
           </Text>
         </View>
       </View>
@@ -115,7 +115,7 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
   );
 };
 
-export default Post;
+export default UserPost;
 
 const styles = StyleSheet.create({
   text: {

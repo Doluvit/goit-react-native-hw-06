@@ -14,10 +14,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { useNavigation } from "@react-navigation/native";
 import { ImageBackgroundComponent } from "../components/ImageBackgroundComponent";
-import {
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config";
 import { logedIn } from "../redux/authSlice";
 import { useDispatch } from "react-redux";
@@ -29,21 +26,21 @@ const LoginScreen = () => {
   const [isFocusedPassword, setIsFocusedPassword] = useState(false);
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [isOpenKeyboard, setIsOpenKeyboard] = useState(false);
-   const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
- useEffect(() => {
-   const unsubscribe = auth.onAuthStateChanged((user) => {
-     setLoading(false);
-     if (user) {
-       navigation.navigate("Home");
-     }
-   });
-   return () => {
-     unsubscribe();
-   };
- }, []);
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setLoading(false);
+      if (user) {
+        navigation.navigate("Home");
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const togglePassword = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -57,7 +54,7 @@ const LoginScreen = () => {
         password
       );
       const userId = credentials.user.uid;
-     
+
       dispatch(logedIn({ email, password, userId }));
       onLogin();
       return credentials.user;
@@ -107,18 +104,15 @@ const LoginScreen = () => {
     navigation.navigate("RegistrationScreen");
   };
 
-   if (loading) {
-     return (
-       <View
-         style={{ flex: 1, justifyContent: "center", alignItems: "center",
-         }}
-       >
-         <Text style={{ fontFamily: "Roboto-Medium", fontSize: 22 }}>
-           Loading...
-         </Text>
-       </View>
-     );
-   }
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontFamily: "Roboto-Medium", fontSize: 22 }}>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

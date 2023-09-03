@@ -20,11 +20,10 @@ const PostsScreen = () => {
         ...doc.data(),
         id: doc.id,
       }));
-      const userPosts = newPost.filter((post) => post.userId === userId);
-      setCurrentPosts(userPosts);
+      setCurrentPosts(newPost);
     });
     return () => getPosts();
-  }, [currentPosts]);
+  }, []);
 
   useEffect(() => {
     const getUserInfo = onAuthStateChanged(auth, (user) => {
@@ -60,7 +59,8 @@ const PostsScreen = () => {
               id={item.id}
               source={item.photoUri}
               title={item.photoTitle}
-              country={item.locationTitle}
+              city={item.locationTitle}
+              country={item.locationCountry}
               coords={item.location}
               comment={item.comment}
             />
