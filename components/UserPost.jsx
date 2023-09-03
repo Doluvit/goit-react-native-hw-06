@@ -1,6 +1,7 @@
 import { View, Image, StyleSheet, Text } from "react-native";
 import {
   IconComment,
+  IconLike,
   IconLocalPosition,
   IconTrashBucket,
 } from "../assets/icons/icons";
@@ -8,7 +9,6 @@ import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 import { deleteDataFromFirestore } from "../helpers/postsControllers";
-import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../config";
 
@@ -61,29 +61,52 @@ const UserPost = ({ source, title, comment, country, coords, id }) => {
       <Text style={styles.title}>{title}</Text>
 
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate("CommentsScreen", {
-                source,
-                id,
-              });
-            }}
-          >
-            <Text>
-              <IconComment />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: 24,
+          }}
+        >
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("CommentsScreen", {
+                  source,
+                  id,
+                });
+              }}
+            >
+              <Text>
+                <IconComment />
+              </Text>
+            </TouchableOpacity>
+            <Text
+              style={[
+                styles.text,
+                {
+                  color: "#BDBDBD",
+                },
+              ]}
+            >
+              {commentData.length}
             </Text>
-          </TouchableOpacity>
-          <Text
-            style={[
-              styles.text,
-              {
-                color: "#BDBDBD",
-              },
-            ]}
-          >
-            {commentData.length}
-          </Text>
+          </View>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+            <Text>
+              <IconLike />
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                {
+                  color: "#BDBDBD",
+                },
+              ]}
+            >
+              {commentData.length}
+            </Text>
+          </View>
         </View>
 
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
