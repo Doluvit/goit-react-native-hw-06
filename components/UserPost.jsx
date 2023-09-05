@@ -71,7 +71,7 @@ const UserPost = ({ source, title, comment, country, coords, id }) => {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate("CommentsScreen", {
+                navigation.navigate("UserCommentsScreen", {
                   source,
                   id,
                 });

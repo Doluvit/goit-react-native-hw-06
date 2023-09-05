@@ -10,6 +10,7 @@ import CommentsScreen from "./screens/CommentsScreen";
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+import UserCommentsScreen from "./screens/UserCommentsScreen";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,7 +26,7 @@ export default function App() {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <MainStack.Navigator initialRouteName={RegistrationScreen}>
+          <MainStack.Navigator initialRouteName="LoginScreen">
             <MainStack.Screen
               name="RegistrationScreen"
               component={RegistrationScreen}
@@ -50,6 +51,18 @@ export default function App() {
             <MainStack.Screen
               name="CommentsScreen"
               component={CommentsScreen}
+              options={{
+                title: "Коментарі",
+                headerShown: true,
+                headerStyle: {
+                  borderBottomWidth: 1,
+                },
+                headerTitleAlign: "center",
+              }}
+            />
+            <MainStack.Screen
+              name="UserCommentsScreen"
+              component={UserCommentsScreen}
               options={{
                 title: "Коментарі",
                 headerShown: true,

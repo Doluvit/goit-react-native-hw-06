@@ -1,11 +1,11 @@
 import { Image, View, Text } from "react-native";
 
-const Comment = ({
+const UserComment = ({
   image,
   text,
   date,
-  direction = "row-revers",
-  textAlign = "right",
+  direction = "row-reverse",
+  textAlign = "left",
 }) => {
   return (
     <View style={{ flexDirection: direction, gap: 16, marginBottom: 24 }}>
@@ -29,6 +29,7 @@ const Comment = ({
             lineHeight: 18,
             color: "#212121",
             marginBottom: 8,
+            textAlign: "right",
           }}
         >
           {text}
@@ -49,4 +50,4 @@ const Comment = ({
   );
 };
 
-export default Comment;
+export default UserComment;

@@ -97,6 +97,8 @@ const LoginScreen = () => {
   };
 
   const onLogin = () => {
+    setEmail("");
+    setPassword("");
     navigation.navigate("Home");
   };
 

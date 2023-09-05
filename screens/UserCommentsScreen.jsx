@@ -9,15 +9,16 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Image,
-} from "react-native";
+  } from "react-native";
 import Comment from "../components/Comment";
 import { IconArrowUp } from "../assets/icons/icons";
 import { useRef } from "react";
 import { db } from "../config";
 import { collection, addDoc, getDocs } from "firebase/firestore";
 import { FlatList } from "react-native-gesture-handler";
+import UserComment from "../components/UserComment ";
 
-const CommentsScreen = () => {
+const UserCommentsScreen = () => {
   const [isOpenKeyboard, setIsOpenKeyboard] = useState(false);
   const route = useRoute();
   const uri = route.params.source;
@@ -44,7 +45,7 @@ const CommentsScreen = () => {
       commentsCollection(postId, comment);
       getComments();
       setComment("");
-    }
+    } 
   };
   const commentsCollection = async (postId, comment) => {
     const collectionRef = collection(db, "posts", postId, "comments");
@@ -101,9 +102,9 @@ const CommentsScreen = () => {
               keyboardShouldPersistTaps="handled"
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
-                <Comment
+                <UserComment
                   key={item.key}
-                  image={require("../assets/images/unknownUserIcon.jpg")}
+                  image={require("../assets/images/authorIcon.jpg")}
                   text={item.comment}
                   date={formatTimestamp(item.timestamp)}
                 />
@@ -227,4 +228,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommentsScreen;
+export default UserCommentsScreen;

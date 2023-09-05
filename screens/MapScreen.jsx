@@ -2,8 +2,6 @@ import { View, StyleSheet, Dimensions } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 const MapScreen = ({ route }) => {
-  const { coords } = route.params.coords;
- 
   return (
     <View style={styles.container}>
       <MapView
@@ -12,8 +10,8 @@ const MapScreen = ({ route }) => {
           height: Dimensions.get("window").height,
         }}
         region={{
-          latitude: coords.latitude,
-          longitude: coords.longitude,
+          latitude: route.params.coords.latitude,
+          longitude: route.params.coords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
@@ -22,12 +20,12 @@ const MapScreen = ({ route }) => {
         onMapReady={() => console.log("Map is ready")}
         onRegionChange={() => console.log("Region change")}
       >
-        {coords && (
+        {route.params.coords && (
           <Marker
             title="You"
             coordinate={{
-              latitude: coords.latitude,
-              longitude: coords.longitude,
+              latitude: route.params.coords.latitude,
+              longitude: route.params.coords.longitude,
             }}
             description="My coordinates"
           />

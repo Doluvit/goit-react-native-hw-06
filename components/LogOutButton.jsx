@@ -12,7 +12,7 @@ export const LogOutButton = () => {
   const handleTurnBack = () => {
     auth.signOut().then(() => {
       dispatch(logedOut());
-      navigator.navigate("RegistrationScreen");
+      navigator.navigate("LoginScreen");
     }).catch((error) => {
       alert(error.message);
     })

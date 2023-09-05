@@ -2,7 +2,6 @@ import { View, Image, StyleSheet, Text } from "react-native";
 import {
   IconComment,
   IconLocalPosition,
-  // IconTrashBucket,
 } from "../assets/icons/icons";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
@@ -14,7 +13,6 @@ import { db } from "../config";
 
 const Post = ({ source, title, comment, city, country, coords, id }) => {
   const [commentData, setCommentData] = useState([]);
-  const [location, setLocation] = useState(null);
 
   const navigation = useNavigation();
 
@@ -31,7 +29,6 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
     );
     return () => unsubscribe();
   }, []);
-
   return (
     <View style={{ marginBottom: 32 }}>
       <View style={{ marginBottom: 8 }}>
@@ -40,23 +37,6 @@ const Post = ({ source, title, comment, city, country, coords, id }) => {
           resizeMode={"cover"}
           style={{ width: "100%", height: 240, borderRadius: 8 }}
         />
-        {/* <TouchableOpacity
-          onPress={() => deleteDataFromFirestore(id)}
-          style={{
-            position: "absolute",
-            right: 5,
-            top: 5,
-            width: 30,
-            height: 30,
-            borderRadius: 20,
-            backgroundColor: "#F6F6F6",
-            justifyContent: "center",
-            alignItems: "center",
-            alignSelf: "center",
-          }}
-        >
-          <IconTrashBucket />
-        </TouchableOpacity> */}
       </View>
       <Text style={styles.title}>{title}</Text>
 
